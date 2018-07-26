@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,20 +18,14 @@ import com.gyx_home.myspecialshapebutton.R;
  * Created by gyx_home on 2018/7/24.
  */
 public class SpecialShapeButton extends View {
+	float toolbar = (float) getResources().getDimension(R.dimen.abc_action_bar_default_height_material);
+	float radian = 80f;
+	float statusbar = (float) getStatusBarHeight(super.getContext());
 	private Paint mPaint;
 	private int mViewWidth, mViewHeight;// 控件宽高
 	private Path mPath;
-	float  toolbar=(float)getResources().getDimension(R.dimen.abc_action_bar_default_height_material);
+	private Path startPath;
 
-	float statusbar=(float)getStatusBarHeight(super.getContext());
-	int getStatusBarHeight(Context context) {
-		int result = 0;
-		int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-			result = context.getResources().getDimensionPixelSize(resourceId);
-		}
-		return result;
-	}
 	public SpecialShapeButton(Context context) {
 		super(context);
 	}
@@ -43,6 +38,15 @@ public class SpecialShapeButton extends View {
 
 	public SpecialShapeButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+	}
+
+	int getStatusBarHeight(Context context) {
+		int result = 0;
+		int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+		if (resourceId > 0) {
+			result = context.getResources().getDimensionPixelSize(resourceId);
+		}
+		return result;
 	}
 
 	private void initPaint() {
@@ -64,24 +68,37 @@ public class SpecialShapeButton extends View {
 		Log.e("宽", mViewWidth + "");
 		Log.e("高", mViewHeight + "");
 		mPath = new Path();
-		mPath.moveTo(mViewWidth / 2F + 100, mViewHeight / 2F - 50);
-		mPath.lineTo(mViewWidth / 2F + 300, mViewHeight / 2F - 50);
-		mPath.lineTo(mViewWidth / 2F + 300, mViewHeight / 2F + 200);
-		mPath.lineTo(mViewWidth / 2F - 100, mViewHeight / 2F + 200);
+		mPath.moveTo(radian, 0);
+		mPath.lineTo(mViewWidth - radian, 0);
+		mPath.quadTo(mViewWidth, 0, mViewWidth, radian);
+		mPath.lineTo(mViewWidth, mViewHeight - radian);
+		mPath.quadTo(mViewWidth, mViewHeight, mViewWidth - radian, mViewHeight);
+		mPath.lineTo(radian, mViewHeight);
+		mPath.quadTo(0, mViewHeight, 0, mViewHeight - radian);
+		mPath.lineTo(0, radian);
+		mPath.quadTo(0, 0, radian, 0);
 		mPath.close();
+		//左边
+		startPath = new Path();
+		startPath.moveTo(radian, 0);
+		startPath.lineTo(mViewWidth / 2 - 100, 0);
+		startPath.lineTo(mViewWidth / 2 + 100, mViewHeight);
+		startPath.lineTo(radian, mViewHeight);
+		startPath.quadTo(0, mViewHeight, 0, mViewHeight - radian);
+		startPath.lineTo(0, radian);
+		startPath.quadTo(0, 0, radian, 0);
+		startPath.close();
+
 	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-
-
-
 		int measureWidth = MeasureSpec.getSize(widthMeasureSpec);
 		int measureHeight = MeasureSpec.getSize(heightMeasureSpec);
 		int measureWidthMode = MeasureSpec.getMode(widthMeasureSpec);
 		int measureHeightMode = MeasureSpec.getMode(heightMeasureSpec);
+		setMeasuredDimension(measureWidth, measureHeight);
 	}
 
 	@Override
@@ -91,68 +108,76 @@ public class SpecialShapeButton extends View {
 		 * 绘制一个红色矩形
 		 */
 		mPaint.setColor(Color.RED);
-		Path path = new Path();
-		path.moveTo(mViewWidth / 2F - 290,mViewHeight / 2F - 50);
-		path.lineTo(mViewWidth / 2F + 290, mViewHeight / 2F - 50);
-		path.quadTo(mViewWidth / 2F + 300, mViewHeight / 2F - 50, mViewWidth / 2F + 300, mViewHeight / 2F - 40);
-		path.lineTo(mViewWidth / 2F + 300, mViewHeight / 2F + 190);
-		path.quadTo(mViewWidth / 2F + 300, mViewHeight / 2F +200, mViewWidth / 2F + 290, mViewHeight / 2F + 200);
-		path.lineTo(mViewWidth / 2F - 290, mViewHeight / 2F + 200);
-		path.quadTo(mViewWidth / 2F - 300, mViewHeight / 2F +200, mViewWidth / 2F - 300, mViewHeight / 2F + 190);
-		path.lineTo(mViewWidth / 2F - 300, mViewHeight / 2F - 40);
-		path.quadTo(mViewWidth / 2F - 300, mViewHeight / 2F - 50, mViewWidth / 2F - 290, mViewHeight / 2F - 50);
+		canvas.drawColor(Color.BLUE);
+		canvas.clipPath(mPath);
+		canvas.drawColor(Color.GREEN);
+		canvas.drawPath(startPath, mPaint);
 
-		canvas.drawPath(path,mPaint);
+		//
+		//计算出baseLine位置
+		mPaint.setTextSize(100);
+		Paint.FontMetricsInt fm = mPaint.getFontMetricsInt();
+		Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();
 
-//		canvas.drawRect(mViewWidth / 2F - 300, mViewHeight / 2F - 50, mViewWidth / 2F + 300, mViewHeight / 2F + 200, mPaint);
+		Log.e("ascent", fontMetrics.ascent + "");
+		Log.e("descent", fontMetrics.descent + "");
+		Log.e("top", fontMetrics.top + "");
+		Log.e("bottom", fontMetrics.bottom + "");
 
-//		canvas.drawColor(Color.BLUE);
-//		canvas.clipPath(mPath);
-//		canvas.drawColor(Color.GREEN);
+
+		int baseLineY = mViewHeight/2 + (fm.bottom - fm.top)/2 - fm.bottom;
+		//画基线
+		mPaint.setColor(Color.YELLOW);
+		canvas.drawLine(0, baseLineY, 3000, baseLineY, mPaint);
+		mPaint.setColor(Color.BLACK);
+
+		//写文字
+		canvas.drawText("测试", 0, baseLineY, mPaint);
+
+
 
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		float y = event.getRawY()-toolbar-statusbar;
+		float y = event.getRawY() - toolbar - statusbar;
 		float x = event.getRawX();
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-
 				break;
-
 			case MotionEvent.ACTION_UP:
-
 				//点击右边
-				if (x > mViewWidth / 2F && x < mViewWidth / 2F + 300 && y > mViewHeight / 2F - 50 && y < mViewHeight / 2F + 200) {
+				if (x > mViewWidth / 2F && x < mViewWidth  && y > 0 && y < mViewHeight) {
 					Path rightPath = new Path();
-					rightPath.moveTo(mViewWidth / 2F + 100, mViewHeight / 2F - 50);
-					rightPath.lineTo(mViewWidth / 2F + 300, mViewHeight / 2F - 50);
-					rightPath.lineTo(mViewWidth / 2F + 300, mViewHeight / 2F + 200);
-					rightPath.lineTo(mViewWidth / 2F - 100, mViewHeight / 2F + 200);
+					rightPath.moveTo(mViewWidth / 2F + 100, 0);
+					rightPath.lineTo(mViewWidth -radian, 0);
+					rightPath.quadTo(mViewWidth, 0, mViewWidth, radian);
+					rightPath.lineTo(mViewWidth , mViewHeight - radian);
+
+					rightPath.quadTo(mViewWidth, mViewHeight, mViewWidth-radian, mViewHeight);
+					rightPath.lineTo(mViewWidth / 2F - 100, mViewHeight);
+					rightPath.lineTo(mViewWidth / 2F + 100, 0);
+
+
 					rightPath.close();
-					mPath = rightPath;
-
-
+					startPath = rightPath;
 				}
 				//点击左边
 				if (x > mViewWidth / 2F - 300 && x < mViewWidth / 2F && y > mViewHeight / 2F - 50 && y < mViewHeight / 2F + 200) {
 					Path leftPath = new Path();
-					leftPath.moveTo(mViewWidth / 2F - 300, mViewHeight / 2F - 50);
-					leftPath.lineTo(mViewWidth / 2F - 100, mViewHeight / 2F - 50);
-					leftPath.lineTo(mViewWidth / 2F + 100, mViewHeight / 2F + 200);
-					leftPath.lineTo(mViewWidth / 2F - 300, mViewHeight / 2F + 200);
+					leftPath.moveTo(radian, 0);
+					leftPath.lineTo(mViewWidth / 2 - 100, 0);
+					leftPath.lineTo(mViewWidth / 2 + 100, mViewHeight);
+					leftPath.lineTo(radian, mViewHeight);
+					leftPath.quadTo(0, mViewHeight, 0, mViewHeight - radian);
+					leftPath.lineTo(0, radian);
+					leftPath.quadTo(0, 0, radian, 0);
 					leftPath.close();
-					mPath = leftPath;
-
-
+					startPath = leftPath;
 				}
-
 				postInvalidate();
 				break;
 		}
-
-
 //		return super.onTouchEvent(event);
 		return true;
 	}
