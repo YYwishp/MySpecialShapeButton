@@ -6,13 +6,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ddd"
     tools:context="com.gyx_home.myspecialshapebutton.MainActivity">
 
     <com.gyx_home.myspecialshapebutton.view.SpecialShapeButton
-
+        android:id="@+id/my_button"
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
+        android:layout_height="50dp"
+        app:bg_color="#fff"
+        app:circular="10dp"
+        app:selected_color="#f0f"
+        app:text_color="#000"
+        app:text_size="20dp"
+        app:offX ="16dp"
+
+
+        />
 
     <TextView
         android:layout_marginTop="20dp"
@@ -25,5 +35,10 @@
         android:text="sdfsdfsdf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+
+    <com.gyx_home.myspecialshapebutton.view.CircleView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
