@@ -34,6 +34,8 @@ public class SpecialShapeButton extends View {
 	private float off_x;
 	private OnClickChangeListener mListener;
 	private boolean isLeft = true;
+	private Path rightPath;
+	private Path leftPath;
 
 	public void setStartText(String startText) {
 		this.startText = startText;
@@ -111,7 +113,7 @@ public class SpecialShapeButton extends View {
 		mPath.lineTo(0, radian);
 		mPath.quadTo(0, 0, radian, 0);
 		mPath.close();
-		//左边
+		//开始是左边
 		startPath = new Path();
 		startPath.moveTo(radian, 0);
 		startPath.lineTo(mViewWidth / 2 - off_x, 0);
@@ -121,7 +123,31 @@ public class SpecialShapeButton extends View {
 		startPath.lineTo(0, radian);
 		startPath.quadTo(0, 0, radian, 0);
 		startPath.close();
+		//左边
+		rightPath = new Path();
+		rightPath.moveTo(mViewWidth / 2F + off_x, 0);
+		rightPath.lineTo(mViewWidth -radian, 0);
+		rightPath.quadTo(mViewWidth, 0, mViewWidth, radian);
+		rightPath.lineTo(mViewWidth , mViewHeight);
 
+		rightPath.lineTo(mViewWidth / 2F - off_x, mViewHeight);
+		rightPath.lineTo(mViewWidth / 2F + off_x, 0);
+
+
+		rightPath.close();
+
+
+
+		//右边
+		leftPath = new Path();
+		leftPath.moveTo(radian, 0);
+		leftPath.lineTo(mViewWidth / 2 - off_x, 0);
+		leftPath.lineTo(mViewWidth / 2 + off_x, mViewHeight);
+		leftPath.lineTo(0, mViewHeight);
+
+		leftPath.lineTo(0, radian);
+		leftPath.quadTo(0, 0, radian, 0);
+		leftPath.close();
 	}
 
 	@Override
@@ -193,17 +219,17 @@ public class SpecialShapeButton extends View {
 			case MotionEvent.ACTION_UP:
 				//点击右边
 				if (x > mViewWidth / 2F && x < mViewWidth  && y > 0 && y < mViewHeight) {
-					Path rightPath = new Path();
-					rightPath.moveTo(mViewWidth / 2F + off_x, 0);
-					rightPath.lineTo(mViewWidth -radian, 0);
-					rightPath.quadTo(mViewWidth, 0, mViewWidth, radian);
-					rightPath.lineTo(mViewWidth , mViewHeight);
-
-					rightPath.lineTo(mViewWidth / 2F - off_x, mViewHeight);
-					rightPath.lineTo(mViewWidth / 2F + off_x, 0);
-
-
-					rightPath.close();
+//					Path rightPath = new Path();
+//					rightPath.moveTo(mViewWidth / 2F + off_x, 0);
+//					rightPath.lineTo(mViewWidth -radian, 0);
+//					rightPath.quadTo(mViewWidth, 0, mViewWidth, radian);
+//					rightPath.lineTo(mViewWidth , mViewHeight);
+//
+//					rightPath.lineTo(mViewWidth / 2F - off_x, mViewHeight);
+//					rightPath.lineTo(mViewWidth / 2F + off_x, 0);
+//
+//
+//					rightPath.close();
 					startPath = rightPath;
 					if (mListener != null&& isLeft) {
 						mListener.onClickChangeListener(1);
@@ -215,15 +241,15 @@ public class SpecialShapeButton extends View {
 				}
 				//点击左边
 				if (x > 0 && x < mViewWidth / 2F && y > 0 && y < mViewHeight) {
-					Path leftPath = new Path();
-					leftPath.moveTo(radian, 0);
-					leftPath.lineTo(mViewWidth / 2 - off_x, 0);
-					leftPath.lineTo(mViewWidth / 2 + off_x, mViewHeight);
-					leftPath.lineTo(0, mViewHeight);
-
-					leftPath.lineTo(0, radian);
-					leftPath.quadTo(0, 0, radian, 0);
-					leftPath.close();
+//					Path leftPath = new Path();
+//					leftPath.moveTo(radian, 0);
+//					leftPath.lineTo(mViewWidth / 2 - off_x, 0);
+//					leftPath.lineTo(mViewWidth / 2 + off_x, mViewHeight);
+//					leftPath.lineTo(0, mViewHeight);
+//
+//					leftPath.lineTo(0, radian);
+//					leftPath.quadTo(0, 0, radian, 0);
+//					leftPath.close();
 
 					startPath = leftPath;
 					if (mListener != null&& !isLeft) {
