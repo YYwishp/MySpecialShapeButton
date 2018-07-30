@@ -204,7 +204,7 @@ public class SpecialShapeButton extends View {
 
 					rightPath.close();
 					startPath = rightPath;
-					if (mListener != null&&isLeft==true) {
+					if (mListener != null&& isLeft) {
 						mListener.onClickChangeListener(1);
 						isLeft = false;
 					}
@@ -225,7 +225,7 @@ public class SpecialShapeButton extends View {
 					leftPath.close();
 
 					startPath = leftPath;
-					if (mListener != null&&isLeft != true) {
+					if (mListener != null&& !isLeft) {
 						mListener.onClickChangeListener(0);
 						isLeft = true;
 
