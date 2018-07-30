@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
 		mMyButton = (SpecialShapeButton) findViewById(R.id.my_button);
 		mMyButton.setStartText("测试测试");
-		mMyButton.setEndText("lalala");
+		mMyButton.setEndText("11");
 		mMyButton.setOnClickChangeListener(new SpecialShapeButton.OnClickChangeListener() {
 			@Override
 			public void onClickChangeListener(int i) {

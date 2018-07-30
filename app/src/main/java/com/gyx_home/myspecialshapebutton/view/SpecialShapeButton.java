@@ -165,9 +165,10 @@ public class SpecialShapeButton extends View {
 //		canvas.drawLine(0, baseLineY, 3000, baseLineY, mPaint);
 		mPaint.setColor(text_color);
 		float startTextwith = mPaint.measureText(startText);
+		float endTextwith = mPaint.measureText(endText);
 		//写文字
 		canvas.drawText(startText, (mViewWidth/2-startTextwith)/2, baseLineY, mPaint);
-		canvas.drawText(endText, (mViewWidth/2-startTextwith)/2+(mViewWidth/2), baseLineY, mPaint);
+		canvas.drawText(endText, (mViewWidth/2-endTextwith)/2+(mViewWidth/2), baseLineY, mPaint);
 
 
 
