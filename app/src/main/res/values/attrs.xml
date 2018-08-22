@@ -2,20 +2,21 @@
 <resources>
     <declare-styleable name="SpecialShapeButton">
         <!--文字大小-->
-        <attr name="text_size" format="dimension"/>
+        <attr name="text_size" format="dimension" />
         <!--文字颜色-->
-        <attr name="text_color" format="color"/>
+        <attr name="text_color" format="color" />
         <!--圆角-->
-        <attr name="circular" format="dimension"/>
+        <attr name="circular" format="dimension" />
         <!--偏移-->
-        <attr name="offX" format="dimension"/>
+        <attr name="offX" format="dimension" />
         <!--背景颜色-->
-        <attr name="bg_color" format="color"/>
+        <attr name="bg_color" format="color" />
         <!--选中的颜色-->
-        <attr name="selected_color" format="color"/>
-
-
-
+        <attr name="selected_color" format="color" />
+    </declare-styleable>
+    <declare-styleable name="CircleView">
+        <!--圆环宽度-->
+        <attr name="circle_with" format="dimension" />
 
     </declare-styleable>
 </resources>

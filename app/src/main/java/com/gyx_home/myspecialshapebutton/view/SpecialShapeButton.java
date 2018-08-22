@@ -68,7 +68,7 @@ public class SpecialShapeButton extends View {
 		off_x = typedArray.getDimension(R.styleable.SpecialShapeButton_offX, 10);
 		bg_color = typedArray.getColor(R.styleable.SpecialShapeButton_bg_color, Color.parseColor("#DCDCDC"));
 		selected_color = typedArray.getColor(R.styleable.SpecialShapeButton_selected_color, Color.parseColor("#ffffff"));
-
+		typedArray.recycle();
 
 
 
